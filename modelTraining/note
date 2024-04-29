@@ -1,0 +1,79 @@
+
+# Dividi i dati in set di addestramento e set di test
+X_train, X_test, y_train, y_test = train_test_split(features, target, test_size=0.2, random_state=42)
+
+# Definisci i modelli di classificazione
+models = [
+    ('Logistic Regression', LogisticRegression(max_iter=100000000)),
+    ('Decision Tree', DecisionTreeClassifier()),
+    ('Random Forest', RandomForestClassifier()),
+    ('Support Vector Machine', SVC(max_iter=100000000)),
+    ('K-Nearest Neighbors', KNeighborsClassifier()),
+    ('Naive Bayes', GaussianNB())
+]
+
+# Addestra e valuta i modelli utilizzando la cross-validation
+for model_name, model in models:
+    # Cross-validation
+    scores = cross_val_score(model, features, target, cv=5)  # Change cv value as needed
+
+    # Stampa i risultati della cross-validation
+    print(f"Modello: {model_name}")
+    print(f"Accuracy: {scores.mean()}")
+    print(f"Standard Deviation: {scores.std()}")
+    print()
+
+    # Addestramento del modello sul set di addestramento completo
+    model.fit(X_train, y_train)
+
+    # Previsioni sul set di test
+    y_pred = model.predict(X_test)
+
+    # Calcola le metriche
+    accuracy = accuracy_score(y_test, y_pred)
+    precision = precision_score(y_test, y_pred, average='weighted')
+    recall = recall_score(y_test, y_pred, average='weighted')
+    f1 = f1_score(y_test, y_pred, average='weighted')
+    confusion = confusion_matrix(y_test, y_pred)
+
+    # Stampa le metriche
+    print(f"Modello: {model_name}")
+    print(f"Accuracy: {accuracy}")
+    print(f"Precision: {precision}")
+    print(f"Recall: {recall}")
+    print(f"F1 Score: {f1}")
+    print("Matrice di Confusione:")
+    print(confusion)
+    print()
+
+class_names = model.classes_
+print(class_names)
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Crea il modello di regressione logistica
+model = LogisticRegression(max_iter=100000000)
+
+# Addestra il modello
+model.fit(features, target)
+
+# Salva il modello su disco
+joblib.dump(model, 'modello.pkl')
+
+# Effettua la cross-validation
+scores = cross_val_score(model, features, target, cv=5)  # Cambia il valore di cv se necessario
+
+# Stampa i risultati della cross-validation
+print("Modello: Logistic Regression")
+print(f"Accuracy: {scores.mean()}")
+print(f"Standard Deviation: {scores.std()}")
